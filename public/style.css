@@ -1,0 +1,65 @@
+body {
+  background-color: rgb(203, 203, 233);
+  margin: 0px;
+  font-family: monospace;
+}
+.gameplay {
+  margin-left: 10px;
+  display: flex;
+}
+/* .players {
+  display: flex;
+  gap: 10vw;
+} */
+h1 {
+  color: blue;
+  padding-bottom: 40px;
+  background-color: rgb(96, 178, 189);
+  padding-left: 10px;
+}
+/* .chooseship {
+  display: flex;
+  gap: 5vw;
+} */
+.ships {
+  font-size: 30px;
+  font-weight: bolder;
+  color: black;
+}
+.ship {
+  display: flex;
+  padding-top: 2vh;
+}
+.ship div {
+  width: 2vw;
+  height: 2vw;
+  border: black solid 0.2vw;
+  background-color: brown;
+}
+.player1-board,
+.player2-board {
+  display: flex;
+  flex-wrap: wrap;
+  width: 24vw;
+  height: 26vh;
+}
+.player1-board div,
+.player2-board div {
+  border: black solid 0.2vw;
+  width: 2vw;
+  height: 2vw;
+  background-color: rgb(62, 57, 160);
+}
+
+.cant-join {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  background: black;
+  color: white;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
