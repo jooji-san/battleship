@@ -225,7 +225,7 @@ socket.on('the other player disconnected', () => {
   let isStartBtnActive = true;
   function handleStartBtnClick() {
     if (!isStartBtnActive) return;
-    check if the player fully populated their board
+    //check if the player fully populated their board
     if (shipInfos.length != 5) {
       return;
     }
