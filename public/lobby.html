@@ -9,11 +9,17 @@
   </head>
   <body>
     <h1>lobby</h1>
-    <button id="join-btn">join</button>
-    <button id="start-btn">start</button>
+    <button id="join-btn">play with a stranger</button>
+    <div>you will be matched with an anonymous player.</div>
+    <button id="start-btn">play with a friend</button>
+    <div>you will be given a link, that you can share with your friend.</div>
 
-    <h3>There are <span id="playerCnt">0</span> players in total</h3>
-    <h3>There are <span id="playerInLobbyCnt">0</span> players in the lobby</h3>
+    <h3>
+      # of players currently playing: <span id="player-gameplay-cnt">0</span>
+    </h3>
+    <h3>
+      # of players waiting in the lobby: <span id="player-lobby-cnt">0</span>
+    </h3>
     <script type="module" src="lobby_script.js"></script>
   </body>
 </html>

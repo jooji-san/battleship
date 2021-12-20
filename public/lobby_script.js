@@ -19,6 +19,14 @@ socket.on('can join', (roomId) => {
   window.location.href = `gameplay?roomId=` + encodeURIComponent(roomId);
 });
 
+socket.on('count updated', function ({ playerLobbyCnt, playerGameplayCnt }) {
+  let playerLobbyCntSpan = document.querySelector('#player-lobby-cnt');
+  playerLobbyCntSpan.textContent = playerLobbyCnt;
+  let playerGameplayCntSpan = document.querySelector('#player-gameplay-cnt');
+  playerGameplayCntSpan.textContent = playerGameplayCnt;
+  console.log(playerGameplayCnt);
+});
+
 function handleJoinBtnClick() {
   socket.emit('player wants to join a room', { id: socket.id });
 }

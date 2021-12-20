@@ -3,7 +3,6 @@ const res = require('express/lib/response');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
-const { SocketAddress } = require('net');
 const crypto = require('crypto');
 
 const app = express();
@@ -34,12 +33,21 @@ app.get('/', (req, res) => {
 
 // socket.io
 
+function playerCntFactory() {
+  lobbySockets = io.sockets.adapter.rooms.get('lobby');
+  playerLobbyCnt = lobbySockets == undefined ? 0 : lobbySockets.size;
+  gameplaySockets = io.sockets.adapter.rooms.get('gameplay');
+  playerGameplayCnt = gameplaySockets == undefined ? 0 : gameplaySockets.size;
+  return { playerLobbyCnt, playerGameplayCnt };
+}
+
 io.on('connection', (socket) => {
   console.log('hello');
 
   socket.on('new player in the lobby', (player) => {
     socket.join('lobby');
     console.log(`${player.id} entered lobby`);
+    io.emit('count updated', playerCntFactory());
   });
   // socket.on('new player joined the room' (player) => {
   //   for (int )
@@ -61,6 +69,8 @@ io.on('connection', (socket) => {
       io.sockets.adapter.rooms.get(roomId) == undefined ||
       io.sockets.adapter.rooms.get(roomId).size < 2
     ) {
+      socket.join('gameplay');
+      io.emit('count updated', playerCntFactory());
       socket.join(roomId);
       console.log(`${socket.id} joined`);
     } else {
@@ -70,12 +80,15 @@ io.on('connection', (socket) => {
 
   socket.on('player wants to start', (player) => {
     let uuid = crypto.randomUUID();
+    socket.leave('lobby');
+    io.emit('count updated', playerCntFactory());
     socket.emit('can join', uuid);
   });
 
   socket.on('disconnect', () => {
     console.log('rip ' + socket.id);
-    socket.broadcast.emit('other player disconnected');
+    io.emit('count updated', playerCntFactory());
+    socket.broadcast.emit('the other player disconnected');
   });
 
   rooms = {};
