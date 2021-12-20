@@ -18,17 +18,28 @@ socket.on('connect', () => {
 
 socket.on("the room is full, can't join", () => {
   console.log("can't join");
-  let gameplayDiv = document.querySelector('.gameplay');
-  gameplayDiv.style.filter = 'blur(10px)';
-  let CantJoinHeader = document.createElement('h1');
-  CantJoinHeader.classList.add('cant-join');
-  CantJoinHeader.textContent = "the room is full. Can't join";
-  document.body.append(CantJoinHeader);
+  displayModal(
+    "Can't join. The room is full",
+    'Only two players can join the same room. Looks like you are late.',
+    'black'
+  );
 });
 
 socket.on('the other player disconnected', () => {
   console.log('the other player disconnected');
 });
+
+function displayModal(title, desc, color) {
+  let gameplayDiv = document.querySelector('.gameplay');
+  let modalDiv = document.querySelector('#modal');
+  let modalTitleHeader = document.querySelector('#modal-title');
+  let modalDescPara = document.querySelector('#modal-desc');
+  gameplayDiv.classList.add('blur');
+  modalDiv.classList.add('visible');
+  modalDiv.style.backgroundColor = color;
+  modalTitleHeader.textContent = title;
+  modalDescPara.textContent = desc;
+}
 
 // function render(map, grid) {
 //   console.log('rendering');
@@ -286,10 +297,16 @@ socket.on('the other player disconnected', () => {
 
     socket.on('you have won', () => {
       console.log('you have won');
+      displayModal('You won', 'yay, congratulations.', 'green');
     });
 
     socket.on('you have lost', () => {
       console.log('you have lost');
+      displayModal(
+        'You lost',
+        "don't let this ruin your day. It's just a game after all",
+        'red'
+      );
     });
   });
 }

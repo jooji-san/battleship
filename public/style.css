@@ -51,15 +51,23 @@ h1 {
   background-color: rgb(62, 57, 160);
 }
 
-.cant-join {
+#modal {
   position: absolute;
   top: 50%;
   right: 50%;
   transform: translate(50%, -50%);
-  background: black;
   color: white;
-  z-index: 2;
+  padding: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.blur {
+  filter: blur(10px);
+}
+
+.visible {
+  display: none;
 }
