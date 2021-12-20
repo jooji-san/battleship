@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 // });
 
 // socket.io
+
 io.on('connection', (socket) => {
   console.log('hello');
 
@@ -54,6 +55,7 @@ io.on('connection', (socket) => {
       io.socketsLeave('waitingRoom');
     }
   });
+
   socket.on('let me join this room', (roomId) => {
     if (
       io.sockets.adapter.rooms.get(roomId) == undefined ||
@@ -65,31 +67,49 @@ io.on('connection', (socket) => {
       socket.emit("the room is full, can't join");
     }
   });
+
   socket.on('player wants to start', (player) => {
     let uuid = crypto.randomUUID();
     socket.emit('can join', uuid);
   });
-  // socket.on('newPlayer', (player) => {
-  //   // maybe change player.id to socket.id
-  //   if (players.playing.find((p) => p.id === player.id)) {
-  //     console.log('the player is already in');
-  //   } else if (players.length == 2) {
-  //     console.log("the room is full. player can't join");
-  //   } else {
-  //     socket.join('game');
-  //     players.push(player);
-  //     io.to('game').emit('a new user has joined the room');
-  //   }
-  // });
+
   socket.on('disconnect', () => {
     console.log('rip ' + socket.id);
     socket.broadcast.emit('other player disconnected');
   });
-  socket.on('map changed', ({ roomId, shipMap }) => {
-    if (io.sockets.adapter.rooms.get(roomId).size == 1) {
-      socket.emit('the other player disconnected');
-      return;
+
+  rooms = {};
+  socket.on('start round', ({ playerId, roomId, map }) => {
+    // maybe there is a better way of doing this
+    if (rooms[roomId] == undefined) {
+      rooms[roomId] = {};
     }
-    socket.to(roomId).emit('map changed', { roomId, shipMap });
+    rooms[roomId][playerId] = { map, points: 0 };
+    if (Object.keys(rooms[roomId]).length == 2) {
+      io.in(roomId).emit('the round started', playerId);
+    }
+  });
+
+  socket.on('attack', ({ roomId, index }) => {
+    let player2Map;
+    for (const playerId of Object.keys(rooms[roomId])) {
+      if (playerId != socket.id) {
+        player2Map = rooms[roomId][playerId].map;
+      }
+    }
+
+    if (player2Map[index] == 1) {
+      socket.emit('attack status', { index, isSuccess: true });
+      rooms[roomId][socket.id].points++;
+      if (rooms[roomId][socket.id].points == 15) {
+        socket.emit('you have won');
+        socket.to(roomId).emit('you have lost');
+      } else {
+        socket.to(roomId).emit('it is your turn');
+      }
+    } else {
+      socket.emit('attack status', { index, isSuccess: false });
+      socket.to(roomId).emit('it is your turn');
+    }
   });
 });
