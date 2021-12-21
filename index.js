@@ -99,7 +99,8 @@ io.on('connection', (socket) => {
     }
     rooms[roomId][playerId] = { map, points: 0 };
     if (Object.keys(rooms[roomId]).length == 2) {
-      io.in(roomId).emit('the round started', playerId);
+      io.in(roomId).emit('the round started');
+      io.to(playerId).emit('it is your turn');
     }
   });
 
@@ -114,6 +115,7 @@ io.on('connection', (socket) => {
     if (player2Map[index] == 1) {
       socket.emit('attack status', { index, isSuccess: true });
       rooms[roomId][socket.id].points++;
+      socket.to(roomId).emit('receive attack', { index, isSuccess: true });
       if (rooms[roomId][socket.id].points == 15) {
         socket.emit('you have won');
         socket.to(roomId).emit('you have lost');
@@ -122,6 +124,7 @@ io.on('connection', (socket) => {
       }
     } else {
       socket.emit('attack status', { index, isSuccess: false });
+      socket.to(roomId).emit('receive attack', { index, isSuccess: false });
       socket.to(roomId).emit('it is your turn');
     }
   });

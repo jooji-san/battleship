@@ -259,13 +259,12 @@ function displayModal(title, desc, color) {
   let startBtn = document.querySelector('#start-btn');
   startBtn.addEventListener('click', handleStartBtnClick);
 
-  socket.on('the round started', (startingPlayerId) => {
-    let isPlayer1Turn;
-    if (startingPlayerId == socket.id) {
+  socket.on('the round started', () => {
+    let isPlayer1Turn = false;
+    socket.on('it is your turn', () => {
       isPlayer1Turn = true;
-    } else {
-      isPlayer1Turn = false;
-    }
+      document.body.style.backgroundColor = 'teal';
+    });
 
     console.log('the round started');
 
@@ -278,6 +277,7 @@ function displayModal(title, desc, color) {
         player2Map[index] = 1;
         e.target.style.backgroundColor = 'red';
         socket.emit('attack', { roomId, index });
+        document.body.style.backgroundColor = 'pink';
       }
     }
     let player2TileDivs = document.querySelectorAll('.player2-board div');
@@ -285,14 +285,22 @@ function displayModal(title, desc, color) {
       player2TileDiv.addEventListener('click', handlePlayer2TileDivClick);
     }
 
-    socket.on('it is your turn', () => (isPlayer1Turn = true));
-
     socket.on('attack status', ({ index, isSuccess }) => {
       console.log('attack status');
       console.log(isSuccess);
       if (isSuccess) {
         player2TileDivs[index].style.backgroundColor = 'green';
       }
+    });
+
+    socket.on('receive attack', ({ index, isSuccess }) => {
+      console.log(player1TileDivs[index]);
+      if (isSuccess) {
+        player1TileDivs[index].style.backgroundColor = 'firebrick'; // crimson, firebrick
+      } else {
+        player1TileDivs[index].style.backgroundColor = 'black';
+      }
+      console.log(player1TileDivs[index]);
     });
 
     socket.on('you have won', () => {
