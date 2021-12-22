@@ -8,17 +8,20 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <h1>BattleShips</h1>
+    <nav><div id="title">BattleShips</div></nav>
     <h2 id="room-id">hello</h2>
     <div class="gameplay">
-      <div class="ships">Choose battleship</div>
+      <div class="battleship-picker">
+        <div class="battleship-picker-title">choose a battleship here:</div>
+        <div class="ships"></div>
+        <form>
+          <label>rotate</label>
+          <input type="checkbox" />
+        </form>
+        <button id="start-btn">start!</button>
+      </div>
       <div class="player1-board"></div>
       <div class="player2-board"></div>
-      <form>
-        <label>X or Y</label>
-        <input type="checkbox" />
-      </form>
-      <button id="start-btn">start!</button>
     </div>
     <div id="modal">
       <h3 id="modal-title"></h3>

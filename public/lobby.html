@@ -8,18 +8,30 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <h1>lobby</h1>
-    <button id="join-btn">play with a stranger</button>
-    <div>you will be matched with an anonymous player.</div>
-    <button id="start-btn">play with a friend</button>
-    <div>you will be given a link, that you can share with your friend.</div>
-
-    <h3>
-      # of players currently playing: <span id="player-gameplay-cnt">0</span>
-    </h3>
-    <h3>
-      # of players waiting in the lobby: <span id="player-lobby-cnt">0</span>
-    </h3>
+    <nav><div id="title">BattleShips</div></nav>
+    <div id="lobby-content">
+      <h1>Lobby</h1>
+      <div class="btn-and-desc">
+        <button id="join-btn">play with a stranger</button>
+        <div>you will be matched with an anonymous player.</div>
+      </div>
+      <div class="btn-and-desc">
+        <button id="start-btn">play with a friend</button>
+        <div>
+          you will be given a link, that you can share with your friend.
+        </div>
+      </div>
+      <div id="player-cnt-container">
+        <div class="player-cnt">
+          # of players currently playing:
+          <span id="player-gameplay-cnt">0</span>
+        </div>
+        <div class="player-cnt">
+          # of players waiting in the lobby:
+          <span id="player-lobby-cnt">0</span>
+        </div>
+      </div>
+    </div>
     <script type="module" src="lobby_script.js"></script>
   </body>
 </html>

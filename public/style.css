@@ -1,53 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+html {
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 body {
-  background-color: rgb(203, 203, 233);
+  background-color: #3730a3;
+  transition: background-color 0.5s;
   margin: 0px;
-  font-family: monospace;
+  font-family: 'Share Tech Mono', monospace;
+  color: white;
 }
+nav {
+  background-color: #312e81;
+  padding: 10px;
+}
+#title {
+  font-size: 30px;
+  color: white;
+}
+
 .gameplay {
-  margin-left: 10px;
+  margin: 1rem;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
 }
-/* .players {
+
+.battleship-picker {
   display: flex;
-  gap: 10vw;
-} */
-h1 {
-  color: blue;
-  padding-bottom: 40px;
-  background-color: rgb(96, 178, 189);
-  padding-left: 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
 }
-/* .chooseship {
-  display: flex;
-  gap: 5vw;
-} */
+
+.battleship-picker-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
 .ships {
   font-size: 30px;
   font-weight: bolder;
   color: black;
 }
+
 .ship {
   display: flex;
-  padding-top: 2vh;
+  margin-top: 0.5rem;
+  width: calc(5 * 9vw);
 }
+
 .ship div {
-  width: 2vw;
-  height: 2vw;
+  width: 9vw;
+  height: 9vw;
   border: black solid 0.2vw;
   background-color: brown;
 }
+
+.player1 {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: calc(16px + 2rem);
+}
+
 .player1-board,
 .player2-board {
   display: flex;
   flex-wrap: wrap;
-  width: 24vw;
-  height: 26vh;
+  width: 90vw;
+  height: 90vw;
 }
+
 .player1-board div,
 .player2-board div {
   border: black solid 0.2vw;
-  width: 2vw;
-  height: 2vw;
+  width: 9vw;
+  height: 9vw;
   background-color: rgb(62, 57, 160);
 }
 
@@ -70,4 +106,63 @@ h1 {
 
 .visible {
   display: none;
+}
+
+#lobby-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0 1rem;
+}
+
+.btn-and-desc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background-color: #4f46e5;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+@media screen and (min-width: 1028px) {
+  .gameplay {
+    flex-direction: row;
+  }
+
+  .ship {
+    width: calc(5 * 2.5rem);
+  }
+
+  .ship div {
+    width: 3vw;
+    height: 3vw;
+    max-width: 2.5rem;
+    max-height: 2.5rem;
+    outline: black solid 0.1rem;
+    background-color: brown;
+  }
+
+  .player1-board,
+  .player2-board {
+    width: 30vw;
+    height: 30vw;
+    max-width: 25rem;
+    max-height: 25rem;
+  }
+
+  .player1-board div,
+  .player2-board div {
+    outline: black solid 0.1rem;
+    width: 3vw;
+    height: 3vw;
+    max-width: 2.5rem;
+    max-height: 2.5rem;
+    background-color: rgb(62, 57, 160);
+  }
+  .btn-and-desc {
+    flex-direction: row;
+    width: fit-content;
+    align-items: center;
+  }
 }
