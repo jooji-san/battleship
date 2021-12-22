@@ -32,6 +32,7 @@ app.get('/', (req, res) => {
 // });
 
 // socket.io
+let rooms = {};
 
 function playerCntFactory() {
   lobbySockets = io.sockets.adapter.rooms.get('lobby');
@@ -72,6 +73,10 @@ io.on('connection', (socket) => {
       socket.join('gameplay');
       io.emit('count updated', playerCntFactory());
       socket.join(roomId);
+      if (rooms[roomId] == undefined) {
+        rooms[roomId] = { wantStartCnt: 0 };
+      }
+      rooms[roomId][socket.id] = null;
       console.log(`${socket.id} joined`);
     } else {
       socket.emit("the room is full, can't join");
@@ -88,17 +93,27 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('rip ' + socket.id);
     io.emit('count updated', playerCntFactory());
-    socket.broadcast.emit('the other player disconnected');
+    // find roomId associated with the playerId
+    let targetRoomId;
+    for (let [roomId, value] of Object.entries(rooms)) {
+      // console.log(roomId);
+      // console.log(value);
+      for (let playerId of Object.keys(value)) {
+        // console.log('playerId: ' + playerId);
+        if (playerId == socket.id) {
+          targetRoomId = roomId;
+        }
+      }
+    }
+    console.log('target: ' + targetRoomId);
+    socket.to(targetRoomId).emit('the other player disconnected');
+    rooms[targetRoomId] = null;
   });
 
-  rooms = {};
   socket.on('start round', ({ playerId, roomId, map }) => {
-    // maybe there is a better way of doing this
-    if (rooms[roomId] == undefined) {
-      rooms[roomId] = {};
-    }
     rooms[roomId][playerId] = { map, points: 0 };
-    if (Object.keys(rooms[roomId]).length == 2) {
+    rooms[roomId].wantStartCnt++;
+    if (rooms[roomId].wantStartCnt == 2) {
       io.in(roomId).emit('the round started');
       io.to(playerId).emit('it is your turn');
     }

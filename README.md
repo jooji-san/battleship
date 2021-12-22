@@ -2,5 +2,8 @@
 
 [x] display player2's attacks on your map
 [x] tell player it's their turn
-[] design
-[] handle player disconnect better
+[] design button, modal, better colors
+[] add animations. modal.
+[] share button
+[] the other player pressed start
+[x] handle player disconnect better

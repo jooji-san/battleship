@@ -25,22 +25,16 @@ socket.on("the room is full, can't join", () => {
   );
 });
 
-socket.on('the other player disconnected', () => {
-  console.log('the other player disconnected');
-});
-
 function displayModal(title, desc, color) {
-  let gameplayDiv = document.querySelector('.gameplay');
   let modalDiv = document.querySelector('#modal');
   let modalTitleHeader = document.querySelector('#modal-title');
   let modalDescPara = document.querySelector('#modal-desc');
-  gameplayDiv.classList.add('blur');
+  modalDiv.classList.add('shadow');
   modalDiv.classList.add('visible');
   modalDiv.style.backgroundColor = color;
   modalTitleHeader.textContent = title;
   modalDescPara.textContent = desc;
 }
-
 // function render(map, grid) {
 //   console.log('rendering');
 //   console.log(map);
@@ -71,7 +65,6 @@ function displayModal(title, desc, color) {
     let ship = document.createElement('div');
     ship.classList.add('ship');
     ship.dataset.size = size;
-    console.log(size);
     for (let i = 0; i < size; i++) {
       ship.appendChild(document.createElement('div'));
     }
@@ -115,7 +108,6 @@ function displayModal(title, desc, color) {
       else inc = 1;
 
       for (let i = 0; i < shipSelectedSize * inc; i += inc) {
-        console.log(i);
         player1TileDivs[
           shipInfos[shipSelectedSize - 1][0] + i
         ].style.backgroundColor = '#3E39A0';
@@ -206,7 +198,6 @@ function displayModal(title, desc, color) {
   // think i should move some variables next to this function. maybe with a module pattern or classes(?)
   function hoverShip(e, index) {
     if (!isShipSelected) return;
-    console.log(shipInfos);
 
     setInc();
     pos = index;
@@ -286,21 +277,17 @@ function displayModal(title, desc, color) {
     }
 
     socket.on('attack status', ({ index, isSuccess }) => {
-      console.log('attack status');
-      console.log(isSuccess);
       if (isSuccess) {
         player2TileDivs[index].style.backgroundColor = 'green';
       }
     });
 
     socket.on('receive attack', ({ index, isSuccess }) => {
-      console.log(player1TileDivs[index]);
       if (isSuccess) {
         player1TileDivs[index].style.backgroundColor = 'firebrick'; // crimson, firebrick
       } else {
         player1TileDivs[index].style.backgroundColor = 'black';
       }
-      console.log(player1TileDivs[index]);
     });
 
     socket.on('you have won', () => {
@@ -317,4 +304,23 @@ function displayModal(title, desc, color) {
       );
     });
   });
+
+  socket.on('the other player disconnected', () => {
+    // reset(); // if the user is forced to restart, this is not needed
+    displayModal(
+      'game ended unexpectedly',
+      'the opponent lost connection or quit. restart the page to play in this room again.',
+      'blue' // change
+    );
+  });
+
+  // function reset() {
+  //   isShipSelected = false;
+  //   shipSelectedSize = 0;
+  //   pos = 0;
+  //   prevPos = null;
+  //   player1Map = Array(100).fill(0, 0);
+  //   inc = 1;
+  //   shipInfos = [];
+  // }
 }
