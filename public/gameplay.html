@@ -6,10 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BattleShips</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
   </head>
   <body>
-    <nav><div id="title">BattleShips</div></nav>
-    <h2 id="room-id">hello</h2>
+    <nav>
+      <div id="nav-content">
+        <div id="title">BattleShips</div>
+        <button class="btn share-btn">SHARE</button>
+      </div>
+    </nav>
     <div class="gameplay">
       <div class="battleship-picker">
         <div class="battleship-picker-title">choose a battleship here:</div>
@@ -18,14 +26,24 @@
           <label>rotate</label>
           <input type="checkbox" />
         </form>
-        <button id="start-btn">start!</button>
+        <button id="start-btn" class="btn">START!</button>
       </div>
       <div class="player1-board"></div>
       <div class="player2-board"></div>
     </div>
-    <div id="modal">
+    <div id="modal" class="shadow">
       <h3 id="modal-title"></h3>
       <p id="modal-desc"></p>
+      <div id="modal-btn-container">
+        <button id="modal-copy-btn" class="btn">copy</button>
+        <button id="modal-close-btn" class="btn">close</button>
+      </div>
+    </div>
+    <div id="snackbar-container">
+      <div
+        id="snackbar"
+        class="animate__animated animate__fadeInUp shadow"
+      ></div>
     </div>
     <script type="module" src="gameplay_script.js"></script>
   </body>

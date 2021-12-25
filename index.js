@@ -83,9 +83,10 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('player wants to start', (player) => {
+  socket.on('player wants to start', () => {
     let uuid = crypto.randomUUID();
     socket.leave('lobby');
+    console.log('wanna start');
     io.emit('count updated', playerCntFactory());
     socket.emit('can join', uuid);
   });
@@ -96,8 +97,8 @@ io.on('connection', (socket) => {
     // find roomId associated with the playerId
     let targetRoomId;
     for (let [roomId, value] of Object.entries(rooms)) {
-      // console.log(roomId);
-      // console.log(value);
+      console.log(roomId);
+      if (value === undefined || value === null) return;
       for (let playerId of Object.keys(value)) {
         // console.log('playerId: ' + playerId);
         if (playerId == socket.id) {
@@ -105,8 +106,11 @@ io.on('connection', (socket) => {
         }
       }
     }
+    if (targetRoomId === undefined) return;
     console.log('target: ' + targetRoomId);
     socket.to(targetRoomId).emit('the other player disconnected');
+    // don't need to remove other player from the room
+    // they will be forced to restart eitherway
     rooms[targetRoomId] = null;
   });
 
@@ -115,7 +119,10 @@ io.on('connection', (socket) => {
     rooms[roomId].wantStartCnt++;
     if (rooms[roomId].wantStartCnt == 2) {
       io.in(roomId).emit('the round started');
+      // maybe should change to roomId, 'cause the first one who is ready should start. that's more fair
       io.to(playerId).emit('it is your turn');
+    } else {
+      socket.to(roomId).emit('the other player is ready to start');
     }
   });
 

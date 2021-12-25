@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
+:root {
+  --nav-color: #fde047;
+  --content-color: #1f2937;
+  --idk-color: #475569;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -10,19 +16,27 @@ html {
 }
 
 body {
-  background-color: #3730a3;
+  background-color: var(--content-color);
   transition: background-color 0.5s;
   margin: 0px;
   font-family: 'Share Tech Mono', monospace;
   color: white;
 }
+
 nav {
-  background-color: #312e81;
-  padding: 10px;
+  background-color: var(--nav-color);
 }
+
+#nav-content {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 #title {
   font-size: 30px;
-  color: white;
+  color: black;
 }
 
 .gameplay {
@@ -54,12 +68,12 @@ nav {
 .ship {
   display: flex;
   margin-top: 0.5rem;
-  width: calc(5 * 9vw);
+  width: calc(5 * 6vw);
 }
 
 .ship div {
-  width: 9vw;
-  height: 9vw;
+  width: 6vw;
+  height: 6vw;
   border: black solid 0.2vw;
   background-color: brown;
 }
@@ -75,19 +89,21 @@ nav {
 .player2-board {
   display: flex;
   flex-wrap: wrap;
-  width: 90vw;
-  height: 90vw;
+  width: calc(10 * 6vw);
+  height: calc(10 * 6vw);
 }
 
 .player1-board div,
 .player2-board div {
   border: black solid 0.2vw;
-  width: 9vw;
-  height: 9vw;
+  width: 6vw;
+  height: 6vw;
   background-color: rgb(62, 57, 160);
 }
 
+/* how does this work on mobile */
 #modal {
+  visibility: hidden;
   position: absolute;
   top: 50%;
   right: 50%;
@@ -100,12 +116,38 @@ nav {
   align-items: center;
 }
 
-.blur {
-  filter: blur(10px);
+#modal-btn-container {
+  display: flex;
+  gap: 1rem;
+}
+
+#modal-btn-container {
+  display: none;
+}
+
+#snackbar-container {
+  transform: translate(-50%, -50%);
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+#snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  background-color: #14b8a6; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+}
+
+.shadow {
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 }
 
 .visible {
-  display: none;
+  visibility: visible !important;
 }
 
 #lobby-content {
@@ -120,23 +162,63 @@ nav {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  background-color: #4f46e5;
+  background-color: var(--idk-color);
   padding: 1rem;
   border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-@media screen and (min-width: 1028px) {
+.btn {
+  font-family: inherit;
+  display: inline-block;
+  padding: 0.6em 1.7em;
+  border: 0.1em solid #ffffff;
+  border-radius: 0.12em;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: transparent;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  color: #000000;
+  background-color: #ffffff;
+}
+
+#start-btn {
+  margin-top: 2rem;
+}
+
+.share-btn {
+  color: black;
+  background-color: #fef3c7;
+}
+
+@media screen and (min-width: 720px) {
   .gameplay {
     flex-direction: row;
   }
 
+  #nav-content {
+    justify-content: start;
+    gap: 2.5rem;
+  }
+
+  .battleship-picker {
+    width: calc(6 * 3.25vw);
+    max-width: calc(6 * 2.5rem);
+  }
+
   .ship {
-    width: calc(5 * 2.5rem);
+    width: calc(5 * 3.25vw);
+    max-width: calc(5 * 2.5rem);
   }
 
   .ship div {
-    width: 3vw;
-    height: 3vw;
+    width: 3.25vw;
+    height: 3.25vw;
     max-width: 2.5rem;
     max-height: 2.5rem;
     outline: black solid 0.1rem;
@@ -145,8 +227,8 @@ nav {
 
   .player1-board,
   .player2-board {
-    width: 30vw;
-    height: 30vw;
+    width: calc(10 * 3.25vw);
+    height: calc(10 * 3.25vw);
     max-width: 25rem;
     max-height: 25rem;
   }
@@ -154,8 +236,8 @@ nav {
   .player1-board div,
   .player2-board div {
     outline: black solid 0.1rem;
-    width: 3vw;
-    height: 3vw;
+    width: 3.25vw;
+    height: 3.25vw;
     max-width: 2.5rem;
     max-height: 2.5rem;
     background-color: rgb(62, 57, 160);

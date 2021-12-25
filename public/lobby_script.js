@@ -4,9 +4,9 @@ socket.on('connect', () => {
   console.log('connected');
   socket.emit('new player in the lobby', { id: socket.id });
 
-  let joinBtn = document.querySelector('#join-btn');
+  let joinBtn = document.querySelector('#stranger-btn');
   joinBtn.addEventListener('click', handleJoinBtnClick);
-  let startBtn = document.querySelector('#start-btn');
+  let startBtn = document.querySelector('#friendly-btn');
   startBtn.addEventListener('click', handleStartBtnClick);
 });
 

@@ -6,8 +6,6 @@ let roomId;
 window.onload = function () {
   let params = new URLSearchParams(document.location.search);
   roomId = params.get('roomId');
-  let roomIdHeader = document.querySelector('#room-id');
-  roomIdHeader.textContent = roomId;
 };
 
 socket.on('connect', () => {
@@ -20,21 +18,51 @@ socket.on("the room is full, can't join", () => {
   console.log("can't join");
   displayModal(
     "Can't join. The room is full",
-    'Only two players can join the same room. Looks like you are late.',
+    'Only two players can join the same room. Looks like you are late. Go back to the lobby maybe.',
     'black'
   );
 });
 
 function displayModal(title, desc, color) {
-  let modalDiv = document.querySelector('#modal');
-  let modalTitleHeader = document.querySelector('#modal-title');
-  let modalDescPara = document.querySelector('#modal-desc');
-  modalDiv.classList.add('shadow');
+  const modalDiv = document.querySelector('#modal');
+  const modalTitleHeader = document.querySelector('#modal-title');
+  const modalDescPara = document.querySelector('#modal-desc');
   modalDiv.classList.add('visible');
   modalDiv.style.backgroundColor = color;
   modalTitleHeader.textContent = title;
   modalDescPara.textContent = desc;
 }
+
+function handleShareBtnClick() {
+  displayModal(
+    'share this link with your friend',
+    document.location,
+    '#065F46'
+  );
+  const modalBtnContainer = document.querySelector('#modal-btn-container');
+  modalBtnContainer.style.display = 'block';
+}
+
+const shareBtn = document.querySelector('.share-btn');
+shareBtn.addEventListener('click', handleShareBtnClick);
+
+function handleCopyBtnClick() {
+  navigator.clipboard.writeText(document.location);
+}
+
+const copyBtn = document.querySelector('#modal-copy-btn');
+copyBtn.addEventListener('click', handleCopyBtnClick);
+
+function handleCloseBtnClick() {
+  const modalBtnContainer = document.querySelector('#modal-btn-container');
+  modalBtnContainer.style.display = 'none';
+  const modalDiv = document.querySelector('#modal');
+  modalDiv.classList.remove('visible');
+}
+
+const closeBtn = document.querySelector('#modal-close-btn');
+closeBtn.addEventListener('click', handleCloseBtnClick);
+
 // function render(map, grid) {
 //   console.log('rendering');
 //   console.log(map);
@@ -49,9 +77,9 @@ function displayModal(title, desc, color) {
 // }
 
 {
-  let player1BoardDiv = document.querySelector('.player1-board');
-  let player2BoardDiv = document.querySelector('.player2-board');
-  let shipsDiv = document.querySelector('.ships');
+  const player1BoardDiv = document.querySelector('.player1-board');
+  const player2BoardDiv = document.querySelector('.player2-board');
+  const shipsDiv = document.querySelector('.ships');
 
   function createBoard(playerBoardDiv) {
     for (let i = 0; i < 100; i++) {
@@ -115,7 +143,7 @@ function displayModal(title, desc, color) {
       }
       shipInfos[shipSelectedSize - 1] = null;
     }
-    // takes care of a glitch. when you are hovering one ship and
+    // takes care of a glitch, that happens when you are hovering one ship and
     // then select another one without inserting the previous one,
     // the previous ship image stays up on the board
     renderBoard();
@@ -228,14 +256,14 @@ function displayModal(title, desc, color) {
   function handleStartBtnClick() {
     if (!isStartBtnActive) return;
     // check if the player fully populated their board
-    if (shipInfos.length != 5) {
-      return;
-    }
-    for (const shipInfo of shipInfos) {
-      if (shipInfo == undefined) {
-        return;
-      }
-    }
+    // if (shipInfos.length != 5) {
+    //   return;
+    // }
+    // for (const shipInfo of shipInfos) {
+    //   if (shipInfo == undefined) {
+    //     return;
+    //   }
+    // }
 
     isStartBtnActive = false;
     for (const shipDiv of shipDivs) {
@@ -250,11 +278,22 @@ function displayModal(title, desc, color) {
   let startBtn = document.querySelector('#start-btn');
   startBtn.addEventListener('click', handleStartBtnClick);
 
+  socket.on('the other player is ready to start', () => {
+    document.querySelector('#snackbar').classList.toggle('visible');
+    document.querySelector('#snackbar').textContent =
+      'hey there. watch you mouth and keep your hands off my girlfriend';
+
+    setTimeout(() => {
+      document.querySelector('#snackbar').classList.toggle('visible');
+    }, 7000);
+  });
+
   socket.on('the round started', () => {
+    const navbar = document.querySelector('nav');
     let isPlayer1Turn = false;
     socket.on('it is your turn', () => {
       isPlayer1Turn = true;
-      document.body.style.backgroundColor = 'teal';
+      navbar.style.backgroundColor = '#86EFAC';
     });
 
     console.log('the round started');
@@ -265,10 +304,10 @@ function displayModal(title, desc, color) {
       let index = parseInt(e.target.dataset.index);
       if (player2Map[index] == 0) {
         isPlayer1Turn = false;
+        navbar.style.backgroundColor = '#FDA4AF';
         player2Map[index] = 1;
         e.target.style.backgroundColor = 'red';
         socket.emit('attack', { roomId, index });
-        document.body.style.backgroundColor = 'pink';
       }
     }
     let player2TileDivs = document.querySelectorAll('.player2-board div');
