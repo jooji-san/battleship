@@ -255,15 +255,15 @@ closeBtn.addEventListener('click', handleCloseBtnClick);
   let isStartBtnActive = true;
   function handleStartBtnClick() {
     if (!isStartBtnActive) return;
-    // check if the player fully populated their board
-    // if (shipInfos.length != 5) {
-    //   return;
-    // }
-    // for (const shipInfo of shipInfos) {
-    //   if (shipInfo == undefined) {
-    //     return;
-    //   }
-    // }
+    check if the player fully populated their board
+    if (shipInfos.length != 5) {
+      return;
+    }
+    for (const shipInfo of shipInfos) {
+      if (shipInfo == undefined) {
+        return;
+      }
+    }
 
     isStartBtnActive = false;
     for (const shipDiv of shipDivs) {
@@ -281,7 +281,7 @@ closeBtn.addEventListener('click', handleCloseBtnClick);
   socket.on('the other player is ready to start', () => {
     document.querySelector('#snackbar').classList.toggle('visible');
     document.querySelector('#snackbar').textContent =
-      'hey there. watch you mouth and keep your hands off my girlfriend';
+      'other player is ready to start';
 
     setTimeout(() => {
       document.querySelector('#snackbar').classList.toggle('visible');
